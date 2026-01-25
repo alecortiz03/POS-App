@@ -1,3 +1,11 @@
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;   /* stops scrolling */
+}
+
 /*============ Classes ============*/
 .container {
   display: flex;
@@ -18,7 +26,6 @@
   justify-content: center;
   transform: scale(1.15); /* increase size */
   padding-right: 10vw;
-  padding-bottom: 30vh;
 
 }
 

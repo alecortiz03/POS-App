@@ -1,0 +1,19 @@
+.menuBar{
+    width: 100%;
+    background-color: #1e3a8a; /* blue */
+    padding-bottom: 20px;
+    height: 7vh
+
+}
+#menuIcon{
+    height: auto;
+    width: 3%;
+    padding-left: 20px;
+    padding-top: 12px;
+}
+#dashboardLogo{
+    height: auto;
+    width: 10%;
+    padding-left: 10px;
+    padding-top: 5px;
+}

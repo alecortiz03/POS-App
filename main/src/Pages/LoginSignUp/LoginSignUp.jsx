@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-import './LoginSignUp.css';
+import '../CSS/LoginSignUp.css';
 
 import userIcon from '../Assets/Icons/usernameIcon.png';
 import passwordIcon from '../Assets/Icons/passwordIcon.png';

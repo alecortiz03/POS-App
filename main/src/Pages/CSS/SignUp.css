@@ -1,0 +1,122 @@
+/*============ Classes ============*/
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+.container::after {
+  content: "";
+  width: 50%;
+  height: 100%;
+  background-color: #1e3a8a; /* blue */
+}
+
+.leftSide {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transform: scale(1.15); /* increase size */
+  padding-right: 10vw;
+  padding-bottom: 30vh;
+
+}
+
+.forgotPasswordLink{
+    padding-top: 3vh;
+    padding-left: 20.4vw;
+}
+.SignUpButtons{
+    display: flex;
+    padding-left: 19.85vw;
+    padding-top: 30px;
+    gap: 20px;
+}
+/*------------ End of Classes ------------*/
+/*============ ID's ============*/
+#mainLogo{
+    width: 70%;
+    height: auto;
+    padding-left: 2vw;
+    padding-bottom: 10px;
+}
+#SignUpSection{
+    padding-top: 25vh;
+    padding-left: 15vw;
+}
+#SignUpText {
+    display: flex;
+    padding-left: 100px;
+}
+#usernameIcon {
+    width: 7%;
+    height: auto;
+    padding-top: 10px;
+    transform: translateY(-10px);
+}
+#usernameInput {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+}
+#usrInpt{
+    width: 20vw;
+    height: 5vh;
+}
+#passwordIcon {
+    width: 7%;
+    height: auto;
+    padding-top: 10px;
+    transform: translateY(-10px);
+}
+#firstNameInpt {
+    width: 20vw;
+    height: 5vh;
+    transform: translateX(+10px);
+}
+#lastNameInpt {
+    width: 20vw;
+    height: 5vh;
+    transform: translateX(+10px);
+}
+#firstNameIcon {
+    width: 7%;
+    height: auto;
+    padding-top: 10px;
+    transform: translateY(+8px);
+}
+#emailIcon {
+    width: 7%;
+    height: auto;
+    padding-top: 10px;
+    transform: translateY(+10px);
+}
+#emailInpt {
+    width: 20vw;
+    height: 5vh;
+    transform: translateX(+10px);
+}
+#passwordInput {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+}
+#pswdInpt{
+    width: 20vw;
+    height: 5vh;
+
+}
+#registerBtn{
+    width: 100px;
+    height: 25px;
+    border-radius: 6px;
+}
+#backToLoginBtn{
+    width: 120px;
+    height: 25px;
+    border-radius: 6px;
+}
+
+/*------------ End of ID's ------------*/

@@ -41,5 +41,41 @@ def login():
     
     return jsonify({"success": True, "message": "Login successful."}), 200
 
+@app.post('/api/signup')
+def signup():
+    data = request.get_json(silent = True) or {}
+    first_name = data.get('firstname', "").strip()
+    last_name = data.get('lastname', "").strip()
+    email = data.get('email', "").strip()
+    username = data.get('username', "").strip()
+    password = data.get('password', "")
+
+    if not all([first_name, last_name, email, username, password]):
+        return jsonify({"success": False, "message": "All fields are required."}), 400
+
+    try:
+        conn = getDatabaseConnection()
+
+        existing_user = conn.execute(
+            "SELECT UID FROM users WHERE username = ?",
+            (username,)
+        ).fetchone()
+
+        if existing_user is not None:
+            return jsonify({"success": False, "message": "Username already exists."}), 409
+
+        conn.execute(
+            """
+            INSERT INTO users ("First Name", "Last Name", "Username", "Email", "Password")
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (first_name, last_name, username, email, password)
+        )
+
+        conn.commit()
+    finally:
+        conn.close()
+
+    return jsonify({"success": True, "message": "Signup successful."}), 201
 if __name__ == '__main__':
     app.run(host = "127.0.0.1", port = 5000, debug = True)
