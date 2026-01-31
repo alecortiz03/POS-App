@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+}
+
+
+nav{
+    position: relative;
+    z-index: 70;
+    width: 100%;
+    height: 5em;
+    background-color: #1e3a8a;
+}
+.burgerClass{
+}
+.mainMenu {
+  position: relative;
+  z-index: 60; /* higher than .backdrop (40) */
+
+}
+
+.navButton{
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: transparent;
+    border-color: transparent;
+    
+}
+.navButton:hover{
+    background-color: #3b82f6;
+    cursor: pointer;
+}
+#menuIcon{
+    background-color: transparent;
+    width: 4em;
+    height: 100%;
+}
+#menuButton{
+    background-color: transparent;
+    border-color: transparent;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+#navLogo{
+    width: 12em;
+    height: auto;
+    padding-top: 7px;
+    padding-left: 20px;
+}
+#menuBody{
+    position: absolute;
+    top: 5em;   /* directly under your nav */
+    left: 0;
+
+    width: 20em;
+    background-color: aquamarine;
+    border-bottom-right-radius: 10px;
+
+    transform: translateX(-30px);
+    opacity: 0;
+    pointer-events: none;
+
+    transition: transform 250ms ease, opacity 250ms ease;
+}
+#menuBody.open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#menuBody.closed {
+  transform: translateX(-30px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#logoutButton:hover{
+    border-bottom-right-radius: 10px;
+}
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  z-index: 40;
+}
