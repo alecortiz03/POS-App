@@ -1,4 +1,5 @@
 import Navbar from '../../Components/Navbar';
+import '../CSS/Customers.css';
 import React from 'react';
 
 const Customers = () => {
@@ -6,8 +7,7 @@ const Customers = () => {
         <div>
             <Navbar />
             <div>
-                <h1>Customers Page</h1>
-                <p>This is where customer information will be displayed.</p>
+                <button className="customerButton">Add Customer</button>
             </div>
         </div>
     )
