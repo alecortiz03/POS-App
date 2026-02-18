@@ -3,14 +3,22 @@ import { useState } from "react";
 import ProductLayout from "./ProductLayout";
 import '../Pages/CSS/productDashboard.css';
 import Searchbar from "./Searchbar";
+import ShoppingCart from "./ShoppingCart";
 
 const ProductDashboard = () => {
     
     
     return (
         <div>
+            <div className="SearchBarContainer">
             <Searchbar />
-            <ProductLayout />
+            </div>
+            <div className="dashboard-container">
+                <ProductLayout />
+                <div className="shoppingcart">
+                  <ShoppingCart />
+                  </div>
+            </div>
         </div>
     );
 };

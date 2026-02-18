@@ -1,6 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useCart } from "../context/CartContext";
+
 const ProductLayout = () => {
+    const { addToCart } = useCart();
     const [productMenu, setProductMenu] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [products, setProducts] = useState([]);
@@ -77,6 +80,26 @@ useEffect(() => {
     const handleMenuClick = (productId, e) => {
         e.stopPropagation();
         setProductMenu(productMenu === productId ? null : productId);
+    };
+
+    const handleProductClick = async (product) => {
+        // Fetch full product details before adding to cart
+        const userUID = localStorage.getItem('userUID');
+        
+        try {
+            const res = await fetch(`http://127.0.0.1:5000/api/product?uid=${userUID}&name=${product.name}`);
+            const data = await res.json();
+            
+            if (data.success) {
+                addToCart({
+                    name: data.product.Name,
+                    price: parseFloat(data.product.Price),
+                    description: data.product.Description
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching product details:', error);
+        }
     };
 
     const handleAddClick = () => {
@@ -179,7 +202,7 @@ useEffect(() => {
             <button className="ProductButon" onClick={handleAddClick}>Add Products</button>
             
             {products.map((product) => (
-                <button key={product.id} className="product-item">
+                <button key={product.id} className="product-item" onClick={() => handleProductClick(product)}>
                     <button className="burger-menu" onClick={(e) => handleMenuClick(product.id, e)}>⋮</button>
                     <h3>{product.name}</h3>
                 </button>

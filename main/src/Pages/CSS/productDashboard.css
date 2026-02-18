@@ -5,6 +5,13 @@
     height: 3vh;
 }
 
+.dashboard-container {
+    display: flex;
+    gap: 20px;
+    padding: 0 10px;
+    align-items: flex-start;
+}
+
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -192,4 +199,26 @@
 
 #deleteButton:hover {
     background-color: #c82333;
+}
+
+.shoppingcart {
+
+  /* give it a height limit relative to screen */
+  max-height: calc(100vh - 120px); 
+  /* adjust 120px depending on header/searchbar height */
+
+  overflow-y: auto;     /* enables vertical scrolling */
+  overflow-x: hidden;
+
+  position: sticky;     /* optional but recommended */
+  top: 20px;            /* keeps cart visible while page scrolls */
+
+  align-self: flex-start; /* prevents flex stretching */
+  transform: translateX(-50px);
+}
+.shoppingcart::-webkit-scrollbar {
+  display: none; /* hides scrollbar in WebKit browsers */
+}
+.SearchBarContainer {
+    transform: translateX(30px);
 }
