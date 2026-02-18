@@ -1,28 +1,18 @@
 import React from "react";
 import { useState } from "react";
+import ProductLayout from "./ProductLayout";
 import '../Pages/CSS/productDashboard.css';
-const ProductDashboard = () => {
-    const [buttons, setButtons] = useState([1]); // start with 1
+import Searchbar from "./Searchbar";
 
-    const addButton = () => {
-        setButtons((prev) => {
-        if (prev.length >= 9) return prev; 
-        return [...prev, prev.length + 1];
-        });
-    };
+const ProductDashboard = () => {
+    
+    
     return (
         <div>
-            <button onClick={addButton}>Add button</button>
-
-            <div className="grid">
-                {buttons.map((num) => (
-                <button key={num} className="gridButton">
-                    {num}
-                </button>
-                ))}
-            </div>
+            <Searchbar />
+            <ProductLayout />
         </div>
     );
-}
+};
 
 export default ProductDashboard;

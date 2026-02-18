@@ -39,7 +39,7 @@ def login():
     if user["password"] != password:
         return jsonify({"success": False, "message": "Invalid username or password."}), 401
     
-    return jsonify({"success": True, "message": "Login successful."}), 200
+    return jsonify({"success": True, "message": "Login successful.", "UID": user["UID"], "Username": user["username"]}), 200
 
 @app.post('/api/signup')
 def signup():
@@ -77,5 +77,175 @@ def signup():
         conn.close()
 
     return jsonify({"success": True, "message": "Signup successful."}), 201
+
+@app.get('/api/products')
+def get_products():
+    uid = request.args.get('uid', type=int)
+    
+    if not uid:
+        return jsonify({"success": False, "message": "UID is required."}), 400
+    
+    try:
+        conn = getDatabaseConnection()
+        products = conn.execute(
+            "SELECT Name FROM Products WHERE OwnerUID = ? AND IsActive = 1",
+            (uid,)
+        ).fetchall()
+        product_list = [dict(product) for product in products]
+    finally:
+        conn.close()
+    return jsonify({"success": True, "products": product_list}), 200
+
+
+@app.get('/api/product')
+def get_product_by_name():
+    uid = request.args.get('uid', type=int)
+    product_name = request.args.get('name', '').strip()
+    
+    if not uid:
+        return jsonify({"success": False, "message": "UID is required."}), 400
+    
+    if not product_name:
+        return jsonify({"success": False, "message": "Product name is required."}), 400
+    
+    try:
+        conn = getDatabaseConnection()
+        product = conn.execute(
+            "SELECT Name, Description, PriceCents FROM Products WHERE OwnerUID = ? AND Name = ? AND IsActive = 1",
+            (uid, product_name)
+        ).fetchone()
+        
+        if product is None:
+            return jsonify({"success": False, "message": "Product not found."}), 404
+        
+        product_data = {
+            "Name": product["Name"],
+            "Description": product["Description"],
+            "Price": f"{product['PriceCents'] / 100:.2f}"  # Format as "13.13"
+        }
+    finally:
+        conn.close()
+
+    return jsonify({"success": True, "product": product_data}), 200
+@app.post('/api/addproduct')
+def add_product():
+    data = request.get_json(silent=True) or {}
+    uid = data.get('uid')
+    name = data.get('name', '').strip()
+    description = data.get('description', '').strip()
+    price = data.get('price', 0)
+    quantity = data.get('quantity', 0)
+    if uid:
+        uid = int(uid)
+    if not uid:
+        return jsonify({"success": False, "message": "UID is required."}), 400
+    
+    if not name:
+        return jsonify({"success": False, "message": "Product name is required."}), 400
+    
+    try:
+        # Convert price from dollars to cents
+        price_cents = int(float(price) * 100)
+        
+        conn = getDatabaseConnection()
+        
+        # Check if product already exists for this user
+        existing_product = conn.execute(
+            "SELECT PID FROM Products WHERE OwnerUID = ? AND Name = ?",
+            (uid, name)
+        ).fetchone()
+        
+        if existing_product:
+            return jsonify({"success": False, "message": "Product with this name already exists."}), 409
+        
+        conn.execute(
+            """
+            INSERT INTO Products (OwnerUID, Name, Description, PriceCents, Quantity, IsActive)
+            VALUES (?, ?, ?, ?, ?, 1)
+            """,
+            (uid, name, description, price_cents, quantity)
+        )
+        
+        conn.commit()
+    finally:
+        conn.close()
+
+    return jsonify({"success": True, "message": "Product added successfully."}), 201
+
+@app.delete('/api/deleteproduct')
+def delete_product():
+    uid = request.args.get('uid', type=int)
+    product_name = request.args.get('name', '').strip()
+    
+    if not uid:
+        return jsonify({"success": False, "message": "UID is required."}), 400
+    
+    if not product_name:
+        return jsonify({"success": False, "message": "Product name is required."}), 400
+    
+    try:
+        conn = getDatabaseConnection()
+        
+        # Check if product exists
+        product = conn.execute(
+            "SELECT PID FROM Products WHERE OwnerUID = ? AND Name = ? AND IsActive = 1",
+            (uid, product_name)
+        ).fetchone()
+        
+        if product is None:
+            return jsonify({"success": False, "message": "Product not found."}), 404
+        
+        # Hard delete - permanently remove from database
+        conn.execute(
+            "DELETE FROM Products WHERE OwnerUID = ? AND Name = ?",
+            (uid, product_name)
+        )
+        
+        conn.commit()
+    finally:
+        conn.close()
+
+    return jsonify({"success": True, "message": "Product deleted successfully."}), 200
+
+@app.get('/api/suggest')
+def suggest_products():
+
+    uid = request.args.get('uid', type=int)
+    query = request.args.get('q', '').strip().lower()
+
+    # basic validation
+    if not uid:
+        return jsonify({"success": False, "message": "UID is required."}), 400
+
+    if len(query) < 2:
+        return jsonify({"success": True, "suggestions": []}), 200
+
+    try:
+        conn = getDatabaseConnection()
+
+        rows = conn.execute(
+            """
+            SELECT Name
+            FROM Products
+            WHERE OwnerUID = ?
+            AND IsActive = 1
+            AND lower(Name) LIKE ?
+            ORDER BY Name ASC
+            LIMIT 8
+            """,
+            (uid, query + "%")
+        ).fetchall()
+
+        suggestions = [row["Name"] for row in rows]
+
+    finally:
+        conn.close()
+
+    return jsonify({
+        "success": True,
+        "suggestions": suggestions
+    }), 200
+
+
 if __name__ == '__main__':
     app.run(host = "127.0.0.1", port = 5000, debug = True)

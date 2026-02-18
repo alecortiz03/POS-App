@@ -1,1 +1,195 @@
+.SearchBar{
+    margin-left: 10px;
+    margin-top: 15px;   
+    width: 30vw;
+    height: 3vh;
+}
 
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    min-width: 300px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.popup h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.inputField,
+.popup input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.popup button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+}
+
+.popup button:hover {
+    background-color: #c82333;
+}
+
+#saveButton {
+    background-color: #28a745;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10vw;
+}
+
+#saveButton:hover {
+    background-color: #218838;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px;
+    padding: 20px;
+    margin-left: 10px;
+}
+
+.ProductButon,
+.product-item {
+    aspect-ratio: 1;
+    min-height: 100px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.ProductButon {
+    background-color: white;
+    font-weight: bold;
+}
+
+.product-item {
+    background-color: white;
+    position: relative;
+}
+
+.burger-menu {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+
+.burger-menu:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.ProductButon:hover,
+.product-item:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+}
+
+.product-item h3 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.product-item p {
+    margin: 2px 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.menu-dropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    min-width: 300px;
+}
+
+.menu-dropdown h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.menu-dropdown p {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu-dropdown button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+}
+
+.menu-dropdown button:hover {
+    background-color: #c82333;
+}
+
+#deleteButton {
+    background-color: #dc3545;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10vw;
+}
+
+#deleteButton:hover {
+    background-color: #c82333;
+}

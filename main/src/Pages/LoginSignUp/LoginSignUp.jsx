@@ -31,6 +31,10 @@ const LoginSignUp = () => {
 
         const data = await res.json();
         if (data.success){
+            localStorage.setItem('userUID', data.UID);
+            localStorage.setItem('username', data.Username);
+            console.log("Login successful, UID stored:", data.UID);
+            console.log("Username stored:", data.Username);
             navigate("/dashboard");
             return;
         }
