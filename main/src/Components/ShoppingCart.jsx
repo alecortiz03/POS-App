@@ -1,12 +1,14 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import './ShoppingCart.css';
+import CustomerSearchBar from "./CustomerSearchBar";
 
 const ShoppingCart = () => {
     const { cartItems, removeFromCart, updateQuantity, getSubtotal, getGST, getTotal, clearCart } = useCart();
 
     return(
         <div className="main">
+            <CustomerSearchBar />
             <h1>Shopping Cart</h1>
             
             {cartItems.length === 0 ? (

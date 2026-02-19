@@ -1,6 +1,5 @@
 .customerButton {
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-
+    background: linear-gradient(135deg, rgba(124, 238, 101, 0.795), rgba(40, 131, 67, 0.829));
     height: 15vh;
     width: 90vw;
     transform: translateX(35px);
@@ -22,4 +21,134 @@
     box-shadow: 0 14px 40px rgba(0,0,0,0.45);
     background-color: rgba(102, 181, 196, 0.45);
 
+}
+.customer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+}
+
+.customerButton {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 200px;
+    text-align: center;
+}
+
+.customerButton:hover {
+        transform: scale(1.015), translateX(-10px);
+        background-color: #f0f0f0;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    min-width: 400px;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.popup h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.popup input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.popup input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.popup button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #dc3545;
+    color: white;
+}
+
+.popup button:hover {
+    background-color: #c82333;
+}
+
+#saveButton {
+    background-color: #28a745;
+    margin-left: 10px;
+}
+
+#saveButton:hover {
+    background-color: #218838;
+}
+.customerUserButton{
+    transform: translateX(35px);
+    width: 90vw;
+    height: 15vh;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 200px;
+    text-align: left;
+}
+
+.customerUserButton:hover {
+    transform: scale(1.015) translateX(35px);
+    background-color: #f0f0f0;
+}
+.customerUserButton.name {
+  text-transform: capitalize; /* John Smith */
+}
+
+.customerUserButton.username {
+  text-transform: none; /* gamer_xx123 */
+}
+.customerUserButton p{
+    font-weight: lighter;
+    color: #1e212479;
 }

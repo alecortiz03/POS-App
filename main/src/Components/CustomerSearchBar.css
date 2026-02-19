@@ -1,0 +1,125 @@
+.customer-search-wrapper {
+  position: relative;
+  z-index: 200;
+  width: 100%;
+  max-width: 520px;
+}
+
+.CustomerSearchBar {
+  width: 20vw;
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  margin-bottom: 10px;
+}
+.CustomerSearchBar::placeholder {
+  font-size: 11.25px;
+}
+
+.CustomerSearchBar:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 3px rgba(79,140,255,0.15);
+}
+
+/* Dropdown */
+.customer-autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: rgba(123, 123, 133, 0.301);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0px 10px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+  z-index: 50;
+}
+
+.customer-autocomplete-button {
+  width: 100%;
+  text-align: left;
+
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.customer-autocomplete-button:hover {
+  background: rgba(123, 123, 133, 0.288);
+  backdrop-filter: blur(10px);
+}
+
+.customer-autocomplete-button:focus {
+  outline: none;
+  background: #eef3ff;
+}
+
+.customer-suggest-title {
+  font-weight: 600;
+}
+
+.customer-suggest-subtitle {
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* Cards */
+.customer-cards {
+  margin-top: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.customer-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.05);
+}
+
+.customer-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: rgba(79,140,255,0.12);
+  border: 1px solid rgba(79,140,255,0.18);
+}
+
+.customer-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.customer-card-title {
+  font-weight: 700;
+}
+
+.customer-card-subtitle {
+  margin-top: 2px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+.customer-card-meta {
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+

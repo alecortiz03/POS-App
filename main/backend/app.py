@@ -245,6 +245,192 @@ def suggest_products():
         "success": True,
         "suggestions": suggestions
     }), 200
+@app.post('/api/customers/add')
+def add_customer():
+
+    data = request.get_json(silent=True) or {}
+
+    OwnerUID = data.get("OwnerUID")
+
+    # Only require what DB needs
+    if not OwnerUID:
+        return jsonify({
+            "success": False,
+            "message": "OwnerUID is required"
+        }), 400
+
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    display_name = data.get("display_name")
+    phone = data.get("phone")
+    email = data.get("email")
+
+    address_line1 = data.get("address_line1")
+    address_line2 = data.get("address_line2")
+    city = data.get("city")
+    province_state = data.get("province_state")
+    postal_code = data.get("postal_code")
+    country = data.get("country")
+
+    try:
+        conn = getDatabaseConnection()
+
+        cursor = conn.execute("""
+            INSERT INTO customers (
+                OwnerUID,
+                first_name,
+                last_name,
+                display_name,
+                phone,
+                email,
+                address_line1,
+                address_line2,
+                city,
+                province_state,
+                postal_code,
+                country
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            OwnerUID,
+            first_name,
+            last_name,
+            display_name,
+            phone,
+            email,
+            address_line1,
+            address_line2,
+            city,
+            province_state,
+            postal_code,
+            country
+        ))
+
+        conn.commit()
+
+        return jsonify({
+            "success": True,
+            "customer_id": cursor.lastrowid
+        })
+
+    finally:
+        conn.close()
+# ...existing code...
+
+@app.get('/api/customers/getcustomers')
+def get_customers():
+    uid = request.args.get('uid', type=int)
+    
+    if not uid:
+        return jsonify({"success": False, "message": "User ID required"}), 400
+    
+    try:
+        conn = getDatabaseConnection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT customer_id, first_name, last_name, display_name, phone, email, 
+                   address_line1, address_line2, city, province_state, 
+                   postal_code, country, created_at
+            FROM customers 
+            WHERE OwnerUID = ?
+            ORDER BY created_at DESC
+        """, (uid,))
+        
+        customers = [dict(row) for row in cursor.fetchall()]
+        
+        return jsonify({"success": True, "customers": customers}), 200
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+    finally:
+        conn.close()
+
+@app.get('/api/customers/suggest')
+def suggest_customers():
+    uid = request.args.get('uid', type=int)
+    q_raw = (request.args.get('q', '') or '').strip()
+
+    if not uid:
+        return jsonify({"success": False, "message": "UID is required."}), 400
+
+    # keep consistent with your products suggest
+    if len(q_raw) < 2:
+        return jsonify({"success": True, "customers": []}), 200
+
+    # case-insensitive search text
+    q = q_raw.lower()
+
+    # phone-friendly query: remove spaces/dashes/brackets from input
+    q_phone = ''.join(ch for ch in q_raw if ch.isdigit())
+
+    try:
+        conn = getDatabaseConnection()
+
+        rows = conn.execute(
+            """
+            SELECT
+                customer_id,
+                first_name,
+                last_name,
+                display_name,
+                phone,
+                email,
+                address_line1,
+                address_line2,
+                city,
+                province_state,
+                postal_code,
+                country,
+                created_at
+            FROM customers
+            WHERE OwnerUID = ?
+              AND is_active = 1
+              AND (
+                lower(COALESCE(first_name,''))   LIKE ?
+                OR lower(COALESCE(last_name,'')) LIKE ?
+                OR lower(COALESCE(display_name,'')) LIKE ?
+                OR lower(COALESCE(email,''))     LIKE ?
+                OR lower(COALESCE(city,''))      LIKE ?
+                OR lower(COALESCE(province_state,'')) LIKE ?
+                OR replace(replace(replace(replace(COALESCE(phone,''), ' ', ''), '-', ''), '(', ''), ')', '') LIKE ?
+              )
+            ORDER BY
+              CASE
+                WHEN lower(COALESCE(display_name,'')) LIKE ? THEN 0
+                WHEN lower(COALESCE(last_name,'')) LIKE ? THEN 1
+                WHEN lower(COALESCE(first_name,'')) LIKE ? THEN 2
+                ELSE 3
+              END,
+              last_name ASC,
+              first_name ASC
+            LIMIT 8
+            """,
+            (
+                uid,
+                f"%{q}%",  # first_name
+                f"%{q}%",  # last_name
+                f"%{q}%",  # display_name
+                f"%{q}%",  # email
+                f"%{q}%",  # city
+                f"%{q}%",  # province/state
+                f"%{q_phone}%" if q_phone else f"%{q}%",  # phone
+                f"{q}%",   # ranking: display_name startswith
+                f"{q}%",   # ranking: last_name startswith
+                f"{q}%",   # ranking: first_name startswith
+            )
+        ).fetchall()
+
+        customers = [dict(r) for r in rows]
+
+        return jsonify({
+            "success": True,
+            "customers": customers
+        }), 200
+
+    finally:
+        conn.close()
+
 
 
 if __name__ == '__main__':
