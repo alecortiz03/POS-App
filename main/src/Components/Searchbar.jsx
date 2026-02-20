@@ -1,41 +1,37 @@
 import React, { useState, useEffect } from "react";
-import "./SearchBar.css"; // ⭐ import css
+import "./SearchBar.css";
 
-export default function SearchBar() {
-
+export default function SearchBar({ onSelectProduct }) {
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
+  const [products, setProducts] = useState([]);
 
-  // get UID from localStorage
   const userUID = localStorage.getItem("userUID");
 
   useEffect(() => {
-
-    if (!userUID || query.length < 2) {
-      setSuggestions([]);
+    if (!userUID || query.trim().length < 2) {
+      setProducts([]);
       return;
     }
 
     const timeout = setTimeout(() => {
-
-      fetch(`http://127.0.0.1:5000/api/suggest?uid=${userUID}&q=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(data => {
-          setSuggestions(data.suggestions || []);
+      fetch(
+        `http://127.0.0.1:5000/api/suggest?uid=${userUID}&q=${encodeURIComponent(query)}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // ✅ backend now returns full objects
+          setProducts(data.products || []);
         })
         .catch(() => {
-          setSuggestions([]);
+          setProducts([]);
         });
-
-    }, 150); // debounce
+    }, 150);
 
     return () => clearTimeout(timeout);
-
   }, [query, userUID]);
 
   return (
     <div className="search-wrapper">
-
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -43,20 +39,25 @@ export default function SearchBar() {
         className="SearchBar"
       />
 
-      {suggestions.length > 0 && (
+      {products.length > 0 && (
         <div className="autocomplete-dropdown">
-          {suggestions.map((s, i) => (
-            <div
-              key={i}
+          {products.map((p) => (
+            <button
+              key={p.PID}                 // ✅ use real id, not index
+              type="button"
               className="autocomplete-item"
-              onMouseDown={() => setQuery(s)} // prevents blur before click
+              onMouseDown={() => {
+  onSelectProduct?.(p);  // ✅ adds to cart via parent
+  setQuery("");          // optional: clear box after adding
+  setProducts([]);       // close dropdown
+}}
             >
-              {s}
-            </div>
+              {p.Name}
+              <p>Price: ${((p.PriceCents || 0) / 100).toFixed(2)}</p>
+            </button>
           ))}
         </div>
       )}
-
     </div>
   );
 }

@@ -91,6 +91,7 @@
 
 .ProductButon,
 .product-item {
+    text-transform: capitalize;
     aspect-ratio: 1;
     min-height: 100px;
     border: 2px solid #007bff;

@@ -213,19 +213,18 @@ def suggest_products():
     uid = request.args.get('uid', type=int)
     query = request.args.get('q', '').strip().lower()
 
-    # basic validation
     if not uid:
         return jsonify({"success": False, "message": "UID is required."}), 400
 
     if len(query) < 2:
-        return jsonify({"success": True, "suggestions": []}), 200
+        return jsonify({"success": True, "products": []}), 200
 
     try:
         conn = getDatabaseConnection()
 
         rows = conn.execute(
             """
-            SELECT Name
+            SELECT *
             FROM Products
             WHERE OwnerUID = ?
             AND IsActive = 1
@@ -236,15 +235,16 @@ def suggest_products():
             (uid, query + "%")
         ).fetchall()
 
-        suggestions = [row["Name"] for row in rows]
+        products = [dict(row) for row in rows]
 
     finally:
         conn.close()
 
     return jsonify({
         "success": True,
-        "suggestions": suggestions
+        "products": products
     }), 200
+
 @app.post('/api/customers/add')
 def add_customer():
 

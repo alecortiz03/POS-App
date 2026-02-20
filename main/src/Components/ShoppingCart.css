@@ -164,3 +164,74 @@
 .clear-cart-btn:hover {
     background-color: #c82333;
 }
+.selectedCustomerCard {
+    opacity: 0;
+    transform: translateY(10px);
+    text-align: right;
+    background-color: rgba(26, 22, 22, 0.267);
+    height: 9vh;
+    border-radius: 10px;
+    box-shadow: #333 10px 10px 50px;
+    margin-bottom: 20px;
+    animation: fadeSlideIn 0.25s ease forwards;
+
+}
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.customerCardName {
+    padding-right: 20px;
+    padding-top: 5px;
+    font-size: 18px;
+    color: #333;
+}
+
+.closeButton{
+    background-color: rgba(231, 57, 57, 0.548);
+    font-size: 9px;
+    font-weight: bold;
+    margin-top: 3px;
+    margin-right: 3px;
+    height: 15px;
+    width: 15px;
+    border: none;
+    border-radius: 10px;
+}
+@keyframes enlarge {
+    to {
+        transform: scale(1.2);
+    }
+}
+.closeButton:hover{
+    animation: enlarge 0.2s ease forwards;
+}
+.selectedCustomerCard:has(.customerCardUsername){
+    height: 12vh;
+}
+.customerCardUsername{
+    padding-right: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.customerCardPhone{
+    padding-right: 20px;
+    font-size: 14px;
+    color: #666;
+}
+.selectedCustomerCard:has(.customerCardPhone){
+    height: 14vh;
+}
+
+.customerCardEmail{
+    padding-right: 20px;
+    font-size: 14px;
+    color: #666;
+    
+}
+.selectedCustomerCard:has(.customerCardEmail){
+    height: 18vh;
+}

@@ -1,15 +1,62 @@
-import React from "react";
-import { useCart } from "../context/CartContext";
+import React, {useState} from "react";
+import { useCart} from "../context/CartContext";
 import './ShoppingCart.css';
 import CustomerSearchBar from "./CustomerSearchBar";
+import closeIcon from '../Pages/Assets/Icons/closeIcon.png';
+import SearchBar from "./Searchbar";
 
 const ShoppingCart = () => {
-    const { cartItems, removeFromCart, updateQuantity, getSubtotal, getGST, getTotal, clearCart } = useCart();
+    const handleSelectProduct = (p) => {
+  // p is the product object coming from your /api/suggest (full product row)
+  addToCart({
+    name: p.Name,                         // matches your cart's `item.name`
+    price: (p.PriceCents || 0) / 100,     // convert cents to dollars
+    pid: p.PID                            // optional but useful later
+  });
+};
+    const closeCustomerCard = () => {
+        setSelectedCustomer(null);
+        localStorage.removeItem('selectedCustomer');
+    }
+    function handleCustomerSelect(customer) {
 
+    if (!customer) {
+        setSelectedCustomer(null);
+        return;
+    }
+    setSelectedCustomer(customer);
+    // You can also pass this customer info to your cart context if needed
+    localStorage.setItem('selectedCustomer', JSON.stringify(customer));
+}
+
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+    const { cartItems, removeFromCart, updateQuantity, getSubtotal, getGST, getTotal, clearCart, addToCart } = useCart();
+    let fullName = "";
+    let username = "";
+    let phoneNumber = "";
+    let email = "";
+    if (selectedCustomer) {
+        const first = selectedCustomer.first_name || "";
+        const last = selectedCustomer.last_name || "";
+        username = selectedCustomer.display_name || "";
+        phoneNumber = selectedCustomer.phone || "";
+        email = selectedCustomer.email || "";
+        fullName = `${first} ${last}`.trim();
+    }
     return(
         <div className="main">
-            <CustomerSearchBar />
-            <h1>Shopping Cart</h1>
+            <CustomerSearchBar onSelectCustomer={handleCustomerSelect}/>
+            {selectedCustomer && (
+                
+                <div className="selectedCustomerCard">
+                    <button className="closeButton" onClick={closeCustomerCard}>X</button>
+                    <h3 className="customerCardName">{fullName}</h3>
+                    {username !== "" && <p className="customerCardUsername">{username}</p>}
+                    {phoneNumber !== "" && <p className="customerCardPhone">{phoneNumber}</p>}
+                    {email !== "" && <p className="customerCardEmail">{email}</p>}
+                </div>
+            )}
             
             {cartItems.length === 0 ? (
                 <p className="empty-cart">No items in cart</p>

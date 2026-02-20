@@ -1,12 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./CustomerSearchBar.css";
 
-export default function CustomerSearchBar() {
+export default function CustomerSearchBar({ onSelectCustomer }) {
 
   const [query, setQuery] = useState("");
   const [customers, setCustomers] = useState([]);
+  const dropdownRef = useRef(null);
 
   const userUID = localStorage.getItem("userUID");
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setCustomers([]);
+        }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
 
@@ -59,7 +72,7 @@ export default function CustomerSearchBar() {
   };
 
   return (
-    <div className="customer-search-wrapper">
+    <div className="customer-search-wrapper" ref={dropdownRef}>
 
       <input
         value={query}
@@ -76,6 +89,10 @@ export default function CustomerSearchBar() {
         key={c.customer_id}
         type="button"
         className="customer-autocomplete-button"
+        onMouseDown={() => {
+  onSelectCustomer?.(c);
+  setCustomers([]); // ✅ closes dropdown immediately
+}} // Use onMouseDown to ensure it fires before blur
       >
         <div className="customer-suggest-title">
           {formatName(c)}
